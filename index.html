@@ -6,6 +6,7 @@
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="style.css">
 </head>
+
 <script>
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./service-worker.js')
@@ -17,6 +18,7 @@
       });
   }
 </script>
+
 <body>
   <h2>待辦事項</h2>
   <input type="text" id="todoInput" placeholder="輸入代辦事項" />
@@ -54,8 +56,29 @@
 
 
   </script>
-  <script src="beforeinstallprompt.js"></script>
-</body>
+  <script>
+    const installBtn = document.getElementById('install-btn');
+    installBtn.style.display = 'none';
 
+    let deferredPrompt;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.style.display = 'inline-block'; 
+    });
+
+    installBtn.addEventListener('click', async () => {
+      if (!deferredPrompt) {
+        alert('安裝提示目前不可用，請使用瀏覽器選單中的「加入主畫面」功能');
+        return;
+      }
+      deferredPrompt.prompt();
+      const choiceResult = await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      installBtn.style.display = 'none';
+    });
+  </script>
+</body>
 
 </html>
