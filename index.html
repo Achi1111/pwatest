@@ -7,26 +7,26 @@
   <link rel="stylesheet" href="style.css">
 </head>
 
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./service-worker.js')
-      .then(registration => {
-        console.log('Service Worker 註冊成功:', registration);
-      })
-      .catch(error => {
-        console.log('Service Worker 註冊失敗:', error);
-      });
-  }
-</script>
-
 <body>
   <h2>待辦事項</h2>
   <input type="text" id="todoInput" placeholder="輸入代辦事項" />
   <button id="addBtn" onclick="newlist()">新增</button>
-  <button id="install-btn">按鈕</button>
+  <button id="install-btn" style="display: none;">安裝 App</button>
   <ol id="todoList"></ol>
 
   <script>
+    // 註冊 Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./service-worker.js')
+        .then(registration => {
+          console.log('✅ Service Worker 註冊成功:', registration);
+        })
+        .catch(error => {
+          console.log('❌ Service Worker 註冊失敗:', error);
+        });
+    }
+
+    // 新增待辦
     function newlist() {
       let todoInput = document.getElementById('todoInput');
       let todoText = todoInput.value.trim();
@@ -39,10 +39,8 @@
       const now = new Date();
       const timeString = now.toLocaleTimeString();
 
-
       let NewListItem = document.createElement('li');
       NewListItem.textContent = `${todoText}（${timeString}） `;
-
 
       let DelBtn = document.createElement('button');
       DelBtn.textContent = '完成';
@@ -54,40 +52,35 @@
       todoInput.value = "";
     }
 
+    // PWA 安裝邏輯
+    const installBtn = document.getElementById('install-btn');
+    let deferredPrompt;
 
-  </script>
-  <script>
-   const installBtn = document.getElementById('install-btn');
-installBtn.style.display = 'inline-block'; // 永遠顯示（除非真的不想給用戶提示）
+    window.addEventListener('beforeinstallprompt', (e) => {
+      console.log('✅ beforeinstallprompt 觸發');
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.style.display = 'inline-block'; // 顯示安裝按鈕
+    });
 
-let deferredPrompt;
+    installBtn.addEventListener('click', async () => {
+      if (!deferredPrompt) {
+        alert('手機尚未允許顯示安裝提示，請用瀏覽器右上角選單「加入主畫面」');
+        return;
+      }
 
-window.addEventListener('beforeinstallprompt', (e) => {
-  console.log('✅ beforeinstallprompt 觸發');
-  e.preventDefault();
-  deferredPrompt = e;
-});
+      deferredPrompt.prompt();
+      const result = await deferredPrompt.userChoice;
+      if (result.outcome === 'accepted') {
+        console.log('✅ 使用者接受安裝');
+      } else {
+        console.log('❌ 使用者取消安裝');
+      }
 
-installBtn.addEventListener('click', async () => {
-  if (!deferredPrompt) {
-    alert('手機尚未允許顯示安裝提示，請用瀏覽器右上角選單「加入主畫面」');
-    return;
-  }
-
-  deferredPrompt.prompt();
-  const result = await deferredPrompt.userChoice;
-  if (result.outcome === 'accepted') {
-    console.log('✅ 使用者接受安裝');
-  } else {
-    console.log('❌ 使用者取消安裝');
-  }
-
-  installBtn.style.display = 'none';
-  deferredPrompt = null;
-});
+      installBtn.style.display = 'none';
+      deferredPrompt = null;
     });
   </script>
 </body>
 
 </html>
-
