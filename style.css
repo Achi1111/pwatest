@@ -1,0 +1,71 @@
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 400px;
+    margin: 30px auto;
+    padding: 0 20px;
+    background-color: #f9f9f9;
+    color: #333;
+  }
+
+  h2 {
+    text-align: center;
+    color: #007acc;
+  }
+
+  input[type="text"] {
+    width: calc(100% - 100px);
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #007acc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+
+  button#addBtn {
+    width: 70px;
+    padding: 10px;
+    margin-left: 10px;
+    font-size: 16px;
+    background-color: #007acc;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  button#addBtn:hover {
+    background-color: #005f99;
+  }
+
+  #todoList {
+    margin-top: 20px;
+    padding-left: 20px;
+  }
+
+  #todoList li {
+    background-color: white;
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  #todoList li button {
+    background-color: #28a745;
+    border: none;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+  }
+
+  #todoList li button:hover {
+    background-color: #1e7e34;
+  }

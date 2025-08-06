@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>待辦清單</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <h2>待辦事項</h2>
+  <input type="text" id="todoInput" placeholder="輸入代辦事項" />
+  <button id="addBtn" onclick="newlist()">新增</button>
+  <button id="install-btn">按鈕</button>
+  <ol id="todoList"></ol>
+
+  <script>
+    function newlist() {
+      let todoInput = document.getElementById('todoInput');
+      let todoText = todoInput.value.trim();
+
+      if (todoText === "") {
+        alert("請輸入待辦事項！");
+        return;
+      }
+
+      const now = new Date();
+      const timeString = now.toLocaleTimeString();
+
+
+      let NewListItem = document.createElement('li');
+      NewListItem.textContent = `${todoText}（${timeString}） `;
+
+
+      let DelBtn = document.createElement('button');
+      DelBtn.textContent = '完成';
+      DelBtn.onclick = () => NewListItem.remove();
+
+      NewListItem.appendChild(DelBtn);
+      document.getElementById('todoList').appendChild(NewListItem);
+
+      todoInput.value = "";
+    }
+
+
+  </script>
+  <script src="beforeinstallprompt.js"></script>
+</body>
+
+</html>
