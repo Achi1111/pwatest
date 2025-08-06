@@ -6,7 +6,17 @@
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="style.css">
 </head>
-
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(registration => {
+        console.log('Service Worker 註冊成功:', registration);
+      })
+      .catch(error => {
+        console.log('Service Worker 註冊失敗:', error);
+      });
+  }
+</script>
 <body>
   <h2>待辦事項</h2>
   <input type="text" id="todoInput" placeholder="輸入代辦事項" />
@@ -46,5 +56,6 @@
   </script>
   <script src="beforeinstallprompt.js"></script>
 </body>
+
 
 </html>
