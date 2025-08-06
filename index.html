@@ -57,28 +57,37 @@
 
   </script>
   <script>
-    const installBtn = document.getElementById('install-btn');
-    installBtn.style.display = 'none';
+   const installBtn = document.getElementById('install-btn');
+installBtn.style.display = 'inline-block'; // 永遠顯示（除非真的不想給用戶提示）
 
-    let deferredPrompt;
+let deferredPrompt;
 
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      installBtn.style.display = 'inline-block'; 
-    });
+window.addEventListener('beforeinstallprompt', (e) => {
+  console.log('✅ beforeinstallprompt 觸發');
+  e.preventDefault();
+  deferredPrompt = e;
+});
 
-    installBtn.addEventListener('click', async () => {
-      if (!deferredPrompt) {
-        alert('安裝提示目前不可用，請使用瀏覽器選單中的「加入主畫面」功能');
-        return;
-      }
-      deferredPrompt.prompt();
-      const choiceResult = await deferredPrompt.userChoice;
-      deferredPrompt = null;
-      installBtn.style.display = 'none';
+installBtn.addEventListener('click', async () => {
+  if (!deferredPrompt) {
+    alert('手機尚未允許顯示安裝提示，請用瀏覽器右上角選單「加入主畫面」');
+    return;
+  }
+
+  deferredPrompt.prompt();
+  const result = await deferredPrompt.userChoice;
+  if (result.outcome === 'accepted') {
+    console.log('✅ 使用者接受安裝');
+  } else {
+    console.log('❌ 使用者取消安裝');
+  }
+
+  installBtn.style.display = 'none';
+  deferredPrompt = null;
+});
     });
   </script>
 </body>
 
 </html>
+
